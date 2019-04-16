@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxl.job.executor.dao.PacketReceiveDao">
+    <!-- 插入抢红包信息 -->
+    <insert id="grapRedPacket" useGeneratedKeys="true"
+            keyProperty="id" parameterType="com.xxl.job.executor.domain.orm.PacketReceive">
+      insert into red_packet_receive( redPacketId,fromUserId, toUserId, amount,createTime)
+      values (#{redPacketId},  #{fromUserId},#{toUserId}, #{amount},now())
+    </insert>
+    <!-- 查询抢过的用户列表 -->
+    <select id="getUserlist" parameterType="int"
+            resultType="java.lang.String">
+		select
+		toUserId
+		from
+			red_packet_receive
+		where redPacketId = #{redPacketId}
+	</select>
+    <!-- 查询抢红包的信息 -->
+    <select id="getPacketReceive" resultType="com.xxl.job.executor.domain.orm.PacketReceive">
+		select
+		*
+		from
+			red_packet_receive
+		where toUserId = #{toUserId} AND  redPacketId = #{redPacketId}
+	</select>
+</mapper>

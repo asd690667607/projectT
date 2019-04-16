@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.dao.SysUserDao">
+    <!--根据uname列出具体管理员-->
+    <select id="selectUserByUname" parameterType="java.lang.String" resultType="com.test.domain.orm.SysUser">
+        SELECT *
+        FROM sys_user
+        WHERE uname=#{uname}
+    </select>
+</mapper>

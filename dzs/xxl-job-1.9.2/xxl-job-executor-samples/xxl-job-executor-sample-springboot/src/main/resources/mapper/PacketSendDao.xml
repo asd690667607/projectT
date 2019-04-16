@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxl.job.executor.dao.PacketSendDao">
+
+    <!-- 查询红包具体信息 -->
+    <select id="getRedPacket" parameterType="int"
+            resultType="com.xxl.job.executor.domain.orm.PacketSend">
+		select
+		*
+		from
+			asset_red_packet_send
+		where id = #{redPacketId}
+	</select>
+
+
+    <!-- 扣减抢红包库存 -->
+    <update id="decreaseRedPacket">
+		update asset_red_packet_send set stock = stock - 1 ,
+		updateTime = now()
+		where id =
+		#{id}
+	</update>
+
+	<!-- 更新红包已领取的金额-->
+	<update id="updateReceiveAmount">
+		update asset_red_packet_send
+		set receiveAmount =#{receiveAmount},
+		updateTime = now()
+		where id =
+		#{id}
+	</update>
+
+	<!--更新状态-->
+	<update id="updateRedPacket">
+		update
+			asset_red_packet_send
+		set redPacketStatus = #{redPacketStatus},
+		updateTime = now()
+		where id = #{id}
+	</update>
+    <!-- 抢红包 -->
+    <update id="decreaseRedPacketForVersion">
+		update
+			asset_red_packet_send
+		set stock = stock - 1 ,
+		    redPacketStatus = 2
+		where id = #{id}
+	</update>
+	<!--发红包-->
+	<insert id="insertPacket" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+			parameterType="com.xxl.job.executor.domain.orm.PacketSend">
+      INSERT INTO asset_red_packet_send
+      (userId,
+        amount,redPacketCount,stock,redPacketType,redPacketStatus,createTime,receiveAmount)
+      VALUE
+      ( #{userId},#{amount},#{redPacketCount},#{stock},#{redPacketType},#{redPacketStatus},now(),#{receiveAmount})
+    </insert>
+	<!-- 更新余额 -->
+	<update id="updateWallet">
+		update
+			asset_wallet
+		set amount = #{amount},
+		 	updateTime = now()
+		where id = #{id}
+	</update>
+	<!-- 查询钱包 -->
+	<select id="getWallet" parameterType="int"
+			resultType="com.xxl.job.executor.domain.orm.Wallet">
+		select
+		*
+		from
+			asset_wallet
+		where userId = #{userId}
+	</select>
+	<!--添加账单-->
+	<insert id="insertBill" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+			parameterType="com.xxl.job.executor.domain.orm.Bill">
+      INSERT INTO user_bill
+      ( userId,
+        availableVariation,availableBalance,billExplain,walletId,bizId,createTime)
+      VALUE
+      (#{userId}, #{availableVariation},#{availableBalance},#{billExplain},#{walletId},#{bizId},now())
+    </insert>
+	<!-- 查询发红包列表 -->
+	<select id="getPacketSend" resultType="com.xxl.job.executor.domain.orm.PacketSend" >
+		select
+		*
+		from
+			asset_red_packet_send
+	</select>
+</mapper>
