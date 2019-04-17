@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active: dev
+server:
+  port: 9999
+---
+
+spring:
+  profiles: dev
+  application:
+    name: pl-prd
+  datasource:
+    # driver-class-name
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url:  jdbc:mysql://localhost:3306/red_packet?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username:  root
+    password:  19961225
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
